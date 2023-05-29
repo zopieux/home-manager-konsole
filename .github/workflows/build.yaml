@@ -1,0 +1,16 @@
+name: "Build flake"
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: "26 13 * * 6"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cachix/install-nix-action@v20
+    - run: nix build
+    - run: ls -alh result/bin/
+    - run: QT_QPA_PLATFORM=offscreen result/bin/konsole-gen-state --main=on --ssh=on
